@@ -1,0 +1,93 @@
+name: flutter_application_1
+description: "A new Flutter project."
+# 다음 줄은 패키지가 우연히 게시되는 것을 방지합니다.
+# pub.dev`Flutter Pub Publish`를 사용합니다. 이것은 개인 패키지에 선호됩니다.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# 다음은 응용 프로그램의 버전 및 빌드 번호를 정의합니다.
+# 버전 번호는 1.2.43과 같이 도트로 구분 된 3 개의 숫자입니다.
+# A +로 분리 된 선택적 빌드 번호가 뒤 따릅니다.
+# 버전과 빌더 번호가 모두 Fluter에서 재정의 될 수 있습니다.
+# 각각-빌드-이름과-빌드 너버를 지정하여 빌드합니다.
+# Android에서 Build-Name은 VersionName으로 사용되며 Build-Number는 VersionCode로 사용됩니다.
+# https://developer.android.com/studio/publish/versioning에서 Android 버전에 대한 자세한 내용을 참조하십시오
+# iOS에서 Build-Name은 cfbundleshortverstring으로 사용되는 반면 Build-Number는 cfbundleversion으로 사용됩니다.
+# iOS 버전 작성에 대해 자세히 알아보십시오
+# https://developer.apple.com/library/archive/documentation/general/reference/infoplistkeyReference/articles/corefoundationkeys.html
+# Windows에서 Build-Name은 메이저, 마이너 및 패치 부품으로 사용됩니다.
+# Build-Number가 Build 접미사로 사용되는 동안 제품 및 파일 버전의 #.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.8
+  sqflite: ^2.0.0
+  flutter_local_notifications: ^19.4.0
+  dotted_border: ^3.1.0
+  provider: ^6.1.5
+  intl: ^0.20.2
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^5.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/to/resolution-aware-images
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/to/asset-from-package
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+    - family: avenir
+      fonts:
+        - asset: assets/fonts/Avenir-Book.ttf
+        - asset: assets/fonts/Avenir-Heavy.ttf
+          weight: 700
+        - asset: assets/fonts/Avenir-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Avenir-Light.ttf
+          weight: 300
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package
