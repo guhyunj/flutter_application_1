@@ -14,11 +14,6 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Android 알림 초기화 설정 - 앱 아이콘으로 codex_logo 사용
-  var initializationSettingsAndroid = AndroidInitializationSettings(
-    "codex_logo",
-  );
-
   /// Flutter Local Notifications 플러그인을 Android 전용 설정으로 초기화합니다.
   ///
   /// Android 플랫폼용 초기화 설정을 생성하고 알림 응답에 대한 콜백 핸들러로
@@ -27,17 +22,28 @@ void main() async {
   ///
   /// 알림 시스템이 제대로 작동하는 데 필요한 비동기 설정 작업을 수행하므로
   /// 초기화는 반드시 await로 기다려야 합니다.
+  var initializationSettingsAndroid = AndroidInitializationSettings(
+    'codex_logo',
+  );
+  var initializationSettingsDarwin = DarwinInitializationSettings(
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestSoundPermission: true,
+  );
   var initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
+    iOS: initializationSettingsDarwin,
   );
-  await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-    onDidReceiveNotificationResponse: (NotificationResponse response) async {
-      if (response.payload != null) {
-        debugPrint('notification payload: ${response.payload!}');
-      }
-    },
-  );
+  // await flutterLocalNotificationsPlugin.initialize(
+  //   initializationSettings,
+  //   onDidReceiveNotificationResponse:
+  //       (NotificationResponse notificationResponse) async {
+  //         final String? payload = notificationResponse.payload;
+  //         if (payload != null) {
+  //           debugPrint('notification payload: ' + payload);
+  //         }
+  //       },
+  // );
   runApp(
     MaterialApp(
       title: "Flutter Alarm Clock",

@@ -31,8 +31,22 @@ class HomePage extends StatelessWidget {
                   return ClockPage();
                 } else if (value.menuType == MenuType.alarm) {
                   return AlarmPage();
+                } else {
+                  return Container(
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(fontSize: 20),
+                        children: [
+                          TextSpan(text: "UnComing Tutorial\n"),
+                          TextSpan(
+                            text: value.title,
+                            style: TextStyle(fontSize: 48),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 }
-                return Container();
               },
             ),
           ),
@@ -45,10 +59,31 @@ class HomePage extends StatelessWidget {
     return Consumer<MenuInfo>(
       builder: (BuildContext context, MenuInfo value, Widget? child) {
         return MaterialButton(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(32)),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 0),
+          color: currentMenuInfo.menuType == value.menuType
+              ? CustomColors.menuBackgroundColor
+              : CustomColors.pageBackgroundColor,
           onPressed: () {
-            // Handle button press
+            var menuInfo = Provider.of<MenuInfo>(context, listen: false);
+            menuInfo.updateMenu(currentMenuInfo);
           },
-          child: Text(currentMenuInfo.title ?? ""),
+          child: Column(
+            children: <Widget>[
+              Image.asset(currentMenuInfo.imageSource!, scale: 1.5),
+              SizedBox(height: 16),
+              Text(
+                currentMenuInfo.title ?? '',
+                style: TextStyle(
+                  fontFamily: 'avenir',
+                  color: CustomColors.primaryTextColor,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
