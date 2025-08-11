@@ -53,7 +53,7 @@ class AlarmHelper {
     var db = await database;
     var result = await db.insert(tableAlarm, alarmInfo.toMap());
     // Use a logging framework or remove this line in production.
-    // print("Alarm inserted with id: $result");
+    print("Alarm inserted with id: $result");
   }
 
   Future<List<AlarmInfo>> getAlarms() async {
