@@ -21,7 +21,7 @@ void main() async {
   /// 페이로드 내용이 디버그 콘솔에 출력됩니다.
   ///
   /// 알림 시스템이 제대로 작동하는 데 필요한 비동기 설정 작업을 수행하므로
-  /// 초기화는 반드시 await로 기다려야 합니다..
+  /// 초기화는 반드시 await로 기다려야 합니다.
   var initializationSettingsAndroid = AndroidInitializationSettings(
     'codex_logo',
   );
