@@ -13,7 +13,7 @@ class AlarmInfo {
     this.gradientColorIndex,
   });
 
-  factory AlarmInfo.fromJson(Map<String, dynamic> json) {
+  factory AlarmInfo.fromMap(Map<String, dynamic> json) {
     return AlarmInfo(
       id: json["id"],
       title: json["title"],
@@ -23,7 +23,7 @@ class AlarmInfo {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       "id": id,
       "title": title,
