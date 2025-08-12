@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../data/theme_data.dart';
+import 'clockview.dart';
 
 class ClockPage extends StatefulWidget {
   const ClockPage({super.key});
@@ -27,7 +28,7 @@ class _ClockPageState extends State<ClockPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Flexible(
-            // flex: ,
+            flex: 1,
             child: Text(
               "Clock",
               style: TextStyle(
@@ -35,6 +36,16 @@ class _ClockPageState extends State<ClockPage> {
                 fontWeight: FontWeight.w700,
                 color: CustomColors.primaryTextColor,
                 fontSize: 24,
+              ),
+            ),
+          ),
+          Flexible(
+            flex: 4,
+            fit: FlexFit.tight,
+            child: Align(
+              alignment: Alignment.center,
+              child: ClockView(
+                size: MediaQuery.of(context).size.height / 4,
               ),
             ),
           ),

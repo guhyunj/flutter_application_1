@@ -31,5 +31,9 @@
     "editor.fontLigatures": true,
     "indentRainbow.lightIndicatorStyleLineWidth": 0,
     "editor.guides.bracketPairsHorizontal": true,
-    "editor.bracketPairColorization.independentColorPoolPerBracketType": true
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+    "javascript.referencesCodeLens.enabled": true,
+    "javascript.referencesCodeLens.showOnAllFunctions": true,
+    "typescript.referencesCodeLens.enabled": true,
+    "typescript.referencesCodeLens.showOnAllFunctions": true
 }
