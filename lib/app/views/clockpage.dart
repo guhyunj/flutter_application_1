@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/app/utils/app_logger.dart';
 import 'package:intl/intl.dart';
 
 import '../data/theme_data.dart';
@@ -22,6 +23,8 @@ class _ClockPageState extends State<ClockPage> {
       offsetSign = "+";
     }
 
+    AppLogger.debug('ClockPage rendering at ${now.toString()}', 'CLOCK_PAGE');
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 32, vertical: 64),
       child: Column(
@@ -44,9 +47,7 @@ class _ClockPageState extends State<ClockPage> {
             fit: FlexFit.tight,
             child: Align(
               alignment: Alignment.center,
-              child: ClockView(
-                size: MediaQuery.of(context).size.height / 4,
-              ),
+              child: ClockView(size: MediaQuery.of(context).size.height / 4),
             ),
           ),
         ],

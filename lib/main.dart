@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
+import 'app/utils/app_logger.dart';
 import 'app/data/enums.dart';
 import 'app/data/models/menu_info.dart';
 import 'app/views/homepage.dart';
@@ -13,6 +15,9 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 로거 초기화
+  AppLogger.info('App starting...', 'MAIN');
 
   /// Flutter Local Notifications 플러그인을 Android 전용 설정으로 초기화합니다.
   ///
@@ -55,6 +60,8 @@ void main() async {
         create: (context) => MenuInfo(MenuType.clock),
         child: HomePage(),
       ),
+      // Talker Navigator Observer 추가 (선택사항)
+      navigatorObservers: [TalkerRouteObserver(AppLogger.instance)],
     ),
   );
 }
