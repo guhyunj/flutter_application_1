@@ -6,7 +6,7 @@
     "workbench.tree.expandMode": "doubleClick",
     "workbench.colorTheme": "Default Dark Modern",
     "editor.fontSize": 12,
-    "workbench.preferredDarkColorTheme": "Atom One Dark",
+    "workbench.preferredDarkColorTheme": "Default Dark Modern",
     "window.autoDetectColorScheme": true,
     "workbench.preferredHighContrastColorTheme": "Default High Contrast",
     "workbench.preferredLightColorTheme": "Default Light Modern",
