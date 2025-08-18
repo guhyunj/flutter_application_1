@@ -70,6 +70,39 @@ class _ClockPageState extends State<ClockPage> {
               child: ClockView(size: MediaQuery.of(context).size.height / 4),
             ),
           ),
+          Flexible(
+            flex: 2,
+            fit: FlexFit.tight,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "Timezone",
+                  style: TextStyle(
+                    fontFamily: "avenir",
+                    fontWeight: FontWeight.bold,
+                    color: CustomColors.primaryTextColor,
+                    fontSize: 24,
+                  ),
+                ),
+                SizedBox(height: 16),
+                Row(
+                  children: [
+                    Icon(Icons.language, color: CustomColors.primaryTextColor),
+                    SizedBox(width: 16),
+                    Text(
+                      'UTC' + offsetSign + timezoneString,
+                      style: TextStyle(
+                        fontFamily: 'avenir',
+                        color: CustomColors.primaryTextColor,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -86,8 +119,28 @@ class DigitalClockWidget extends StatefulWidget {
 }
 
 class DigitalClockWidgetState extends State<DigitalClockWidget> {
-  var formattedTime = DateFormat("HH:mm").format(DateTime.now());
+  var formattedTime = DateFormat("HH:mm:ss").format(DateTime.now());
   late Timer timer;
+
+  @override
+  void initState() {
+    this.timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      var perviousMinute = DateTime.now().add(Duration(seconds: -1)).second;
+      var currentMinute = DateTime.now().second;
+      if (perviousMinute != currentMinute) {
+        setState(() {
+          formattedTime = DateFormat('HH:mm:ss').format(DateTime.now());
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    this.timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
