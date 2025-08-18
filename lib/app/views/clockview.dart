@@ -50,6 +50,11 @@ class _ClockViewState extends State<ClockView> {
 
   @override
   void initState() {
+    AppLogger.debug(
+      'ClockView initializing with size: ${widget.size}',
+      'CLOCK_VIEW',
+    );
+
     // 위젯이 생성될 때 타이머를 시작합니다
     // Duration(seconds: 1): 1초마다 실행
     // setState(() {}): 화면을 다시 그리도록 Flutter에게 알림
@@ -58,14 +63,18 @@ class _ClockViewState extends State<ClockView> {
         // 빈 setState - 시간이 변경되었으므로 CustomPainter가 다시 그려집니다
       });
     });
+
+    AppLogger.info('ClockView timer started', 'CLOCK_VIEW');
     super.initState();
   }
 
   @override
   void dispose() {
+    AppLogger.debug('ClockView disposing', 'CLOCK_VIEW');
     // 위젯이 제거될 때 타이머를 정리하여 메모리 누수를 방지합니다
     // 이는 매우 중요한 부분으로, 이를 생략하면 앱이 종료되어도 타이머가 계속 실행될 수 있습니다
     this.timer.cancel();
+    AppLogger.info('ClockView timer cancelled', 'CLOCK_VIEW');
     super.dispose();
   }
 
@@ -108,6 +117,11 @@ class ClockPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    AppLogger.debug(
+      'ClockPainter painting at ${dateTime.hour}:${dateTime.minute}:${dateTime.second}',
+      'CLOCK_PAINTER',
+    );
+
     // 캔버스의 중심점 계산
     var centerX = size.width / 2;
     var centerY = size.height / 2;
@@ -118,7 +132,7 @@ class ClockPainter extends CustomPainter {
     // 중심점을 Offset 객체로 생성
     var center = Offset(centerX, centerY);
     // 시계의 반지름 계산 - 가로와 세로 중 작은 값의 절반
-    var radius = min(centerX, centerY);
+    var radius = min(centerX,  centerY); // 반지름
 
     // ========== Paint 객체들 정의 - 각 구성 요소의 스타일 설정 ==========
     
@@ -131,8 +145,36 @@ class ClockPainter extends CustomPainter {
       ..style = PaintingStyle.stroke // 채우기가 아닌 선으로 그리기
       ..strokeWidth = size.width / 20; // 선의 굵기를 화면 크기에 비례하여 설정
 
+
     // 중앙 점을 그릴 Paint 객체 (현재 미사용 - 추후 구현 예정)
     // var centerDotBrush = Paint()..color = CustomColors.clockOutline;
+
+    var secHandBrush = Paint()
+      ..color = CustomColors.secHandColor!
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = size.width / 60;
+
+    var minHandBrush = Paint()
+      ..shader = RadialGradient(
+        colors: [CustomColors.minHandStatColor, CustomColors.minHandEndColor],
+      ).createShader(Rect.fromCircle(center: center, radius: radius))
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = size.width / 30;
+
+    var hourHandBrush = Paint()
+      ..shader = RadialGradient(
+        colors: [CustomColors.hourHandStatColor, CustomColors.hourHandEndColor],
+      ).createShader(Rect.fromCircle(center: center, radius: radius))
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = size.width / 24;
+
+    var dashBrush = Paint()
+      ..color = CustomColors.clockOutline
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
 
     // 초침을 그릴 Paint 객체 (현재 미사용 - 추후 구현 예정)
     // var secHandBrush = Paint()
@@ -175,6 +217,39 @@ class ClockPainter extends CustomPainter {
     // 2. 시계 테두리 원 그리기
     // 배경 원과 같은 크기로 테두리만 그립니다
     canvas.drawCircle(center, radius * 0.75, outlineBrush);
+
+    var hourHandX =
+        centerX +
+        radius *
+            0.4 *
+            cos((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
+    var hourHandY =
+        centerY +
+        radius *
+            0.4 *
+            sin((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
+    canvas.drawLine(center, Offset(hourHandX, hourHandY), hourHandBrush);
+
+    var minHandX = centerX + radius * 0.6 * cos(dateTime.minute * 6 * pi / 180);
+    var minHandY = centerY + radius * 0.6 * sin(dateTime.minute * 6 * pi / 180);
+    canvas.drawLine(center, Offset(minHandX, minHandY), minHandBrush);
+
+    var secHandX = centerX + radius * 0.6 * cos(dateTime.second * 6 * pi / 180);
+    var secHandY = centerY + radius * 0.6 * sin(dateTime.second * 6 * pi / 180);
+    canvas.drawLine(center, Offset(secHandX, secHandY), secHandBrush);
+
+    canvas.drawCircle(center, radius * 0.12, centerDotBrush);
+
+    var outerRadius = radius;
+    var innerRadius = radius * 0.9;
+    for (var i = 0; i < 360; i += 12) {
+      var x1 = centerX + outerRadius * cos(i * pi / 180);
+      var y1 = centerY + outerRadius * sin(i * pi / 180);
+
+      var x2 = centerX + innerRadius * cos(i * pi / 180);
+      var y2 = centerY + innerRadius * sin(i * pi / 180);
+      canvas.drawLine(Offset(x1, y1), Offset(x2, y2), dashBrush);
+    }
 
     // ========== 시침 계산 및 그리기 ==========
     
