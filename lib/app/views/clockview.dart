@@ -49,7 +49,10 @@ class _ClockViewState extends State<ClockView> {
 
   @override
   void initState() {
-    AppLogger.debug('ClockView initializing with size: ${widget.size}', 'CLOCK_VIEW');
+    AppLogger.debug(
+      'ClockView initializing with size: ${widget.size}',
+      'CLOCK_VIEW',
+    );
 
     // 위젯이 생성될 때 타이머를 시작합니다
     // Duration(seconds: 1): 1초마다 실행
@@ -182,9 +185,15 @@ class ClockPainter extends CustomPainter {
     // - 시간: 12시간 = 360도이므로 1시간 = 30도
     // - 분: 60분 = 30도(시침이 한 시간 동안 움직이는 각도)이므로 1분 = 0.5도
     var hourHandX =
-        centerX + radius * 0.4 * cos((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
+        centerX +
+        radius *
+            0.4 *
+            cos((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
     var hourHandY =
-        centerY + radius * 0.4 * sin((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
+        centerY +
+        radius *
+            0.4 *
+            sin((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
     // 중심점에서 계산된 끝점까지 선을 그어 시침 완성
     canvas.drawLine(center, Offset(hourHandX, hourHandY), hourHandBrush);
 
