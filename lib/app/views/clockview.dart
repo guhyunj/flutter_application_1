@@ -114,72 +114,119 @@ class ClockPainter extends CustomPainter {
       'CLOCK_PAINTER',
     );
 
-    var centerX = size.width / 2;
-    var centerY = size.height / 2;
-    var center = Offset(centerX, centerY);
+    // === 1. 기본 좌표 및 크기 계산 ===
+    // 캔버스의 중심점을 계산합니다
+    var centerX = size.width / 2; // 가로 중심점
+    var centerY = size.height / 2; // 세로 중심점
+    var center = Offset(centerX, centerY); // 중심점을 Offset 객체로 생성
+    // 시계의 반지름: 가로/세로 중 작은 값을 사용하여 정원 형태 보장
     var radius = min(centerX, centerY);
 
+    // === 2. 페인트 브러시 설정 ===
+    // 시계 배경을 칠하는 브러시 (채우기 스타일)
     var fillBrush = Paint()..color = CustomColors.clockBG;
+
+    // 시계 외곽선을 그리는 브러시 (테두리 스타일)
     var outlineBrush = Paint()
       ..color = CustomColors.clockOutline
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width / 20;
+      ..style = PaintingStyle
+          .stroke // 채우기가 아닌 선 그리기
+      ..strokeWidth = size.width / 20; // 테두리 두께: 전체 너비의 1/20
+
+    // 시계 중앙 점을 그리는 브러시
     var centerDotBrush = Paint()..color = CustomColors.clockOutline;
 
+    // 초침을 그리는 브러시 (가장 얇고 빨간색)
     var secHandBrush = Paint()
       ..color = CustomColors.secHandColor!
       ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = size.width / 60;
+      ..strokeCap = StrokeCap
+          .round // 선 끝을 둥글게
+      ..strokeWidth = size.width / 60; // 가장 얇은 두께
 
+    // 분침을 그리는 브러시 (그라디언트 효과 적용)
     var minHandBrush = Paint()
       ..shader = RadialGradient(
+        // 중심에서 바깥쪽으로 색상이 변하는 방사형 그라디언트
         colors: [CustomColors.minHandStatColor, CustomColors.minHandEndColor],
       ).createShader(Rect.fromCircle(center: center, radius: radius))
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = size.width / 30;
+      ..strokeWidth = size.width / 30; // 중간 두께
 
+    // 시침을 그리는 브러시 (가장 굵고 그라디언트 효과)
     var hourHandBrush = Paint()
       ..shader = RadialGradient(
         colors: [CustomColors.hourHandStatColor, CustomColors.hourHandEndColor],
       ).createShader(Rect.fromCircle(center: center, radius: radius))
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = size.width / 24;
+      ..strokeWidth = size.width / 24; // 가장 굵은 두께
 
+    // 시간 눈금(12개 선)을 그리는 브러시
     var dashBrush = Paint()
       ..color = CustomColors.clockOutline
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1;
+      ..strokeWidth = 1; // 가장 얇은 선
 
+    // === 3. 시계 배경 및 테두리 그리기 ===
+    // 시계 배경원: 전체 반지름의 75% 크기로 그리기
     canvas.drawCircle(center, radius * 0.75, fillBrush);
+    // 시계 테두리원: 배경과 같은 크기로 외곽선만 그리기
     canvas.drawCircle(center, radius * 0.75, outlineBrush);
 
+    // === 4. 시침 그리기 ===
+    // 시침 각도 계산: (시간 * 30도) + (분 * 0.5도)
+    // - 시간: 12시간 = 360도이므로 1시간 = 30도
+    // - 분: 60분 = 30도(시침이 한 시간 동안 움직이는 각도)이므로 1분 = 0.5도
     var hourHandX =
-        centerX + radius * 0.4 * cos((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
+        centerX +
+        radius *
+            0.4 *
+            cos((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
     var hourHandY =
-        centerY + radius * 0.4 * sin((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
+        centerY +
+        radius *
+            0.4 *
+            sin((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
+    // 중심점에서 계산된 끝점까지 선을 그어 시침 완성
     canvas.drawLine(center, Offset(hourHandX, hourHandY), hourHandBrush);
 
+    // === 5. 분침 그리기 ===
+    // 분침 각도 계산: 분 * 6도 (60분 = 360도이므로 1분 = 6도)
     var minHandX = centerX + radius * 0.6 * cos(dateTime.minute * 6 * pi / 180);
     var minHandY = centerY + radius * 0.6 * sin(dateTime.minute * 6 * pi / 180);
+    // 시침보다 긴 길이(반지름의 60%)로 분침 그리기
     canvas.drawLine(center, Offset(minHandX, minHandY), minHandBrush);
 
+    // === 6. 초침 그리기 ===
+    // 초침 각도 계산: 초 * 6도 (60초 = 360도이므로 1초 = 6도)
     var secHandX = centerX + radius * 0.6 * cos(dateTime.second * 6 * pi / 180);
     var secHandY = centerY + radius * 0.6 * sin(dateTime.second * 6 * pi / 180);
+    // 분침과 같은 길이로 초침 그리기
     canvas.drawLine(center, Offset(secHandX, secHandY), secHandBrush);
 
+    // === 7. 중앙 점 그리기 ===
+    // 모든 바늘이 만나는 중심점을 작은 원으로 표시
     canvas.drawCircle(center, radius * 0.12, centerDotBrush);
 
-    var outerRadius = radius;
-    var innerRadius = radius * 0.9;
+    // === 8. 시간 눈금 그리기 ===
+    // 12개의 시간 눈금을 그리기 위한 준비
+    var outerRadius = radius; // 바깥쪽 반지름 (시계 테두리까지)
+    var innerRadius = radius * 0.9; // 안쪽 반지름 (눈금 길이 결정)
+
+    // 0도부터 360도까지 12도씩 증가하며 총 30개의 눈금 그리기
+    // (12도 간격 = 360도 ÷ 30 = 12도, 즉 30개 눈금)
     for (var i = 0; i < 360; i += 12) {
+      // 바깥쪽 점 좌표 계산 (시계 테두리)
       var x1 = centerX + outerRadius * cos(i * pi / 180);
       var y1 = centerY + outerRadius * sin(i * pi / 180);
 
+      // 안쪽 점 좌표 계산 (눈금의 안쪽 끝)
       var x2 = centerX + innerRadius * cos(i * pi / 180);
       var y2 = centerY + innerRadius * sin(i * pi / 180);
+
+      // 바깥쪽 점에서 안쪽 점까지 선을 그어 눈금 완성
       canvas.drawLine(Offset(x1, y1), Offset(x2, y2), dashBrush);
     }
   }
